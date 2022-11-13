@@ -116,7 +116,8 @@ DATABASES = {
           "NAME": "DearSanta",
           "USER": "root",
           "PASSWORD": "ojysep9987",
-          "HOST": "127.0.0.1",
+          # "HOST": "127.0.0.1",
+          "HOST": "dearsanta.cg8oybxtdlm3.ap-northeast-2.rds.amazonaws.com",
           "PORT": "3306"
     }
 }
