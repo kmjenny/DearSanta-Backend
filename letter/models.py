@@ -7,7 +7,7 @@ class Letter(models.Model):
     writer = models.ForeignKey("accounts.User",
                                on_delete=models.CASCADE,
                                db_column='writer')
-    content = models.CharField(null=True)
+    content = models.CharField(max_length=255, null=True)
     is_answer = models.SmallIntegerField(default=0)
 
     def __str__(self):
