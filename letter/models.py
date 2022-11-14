@@ -18,6 +18,7 @@ class Letter(models.Model):
 
 
 class Answer(models.Model):
+    content = models.CharField(max_length=255, null=True)
     letter = models.ForeignKey("letter.Letter",
                                on_delete=models.CASCADE,
                                db_column='letter')
