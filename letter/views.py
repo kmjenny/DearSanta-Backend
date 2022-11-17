@@ -1,4 +1,6 @@
 import json, jwt
+from datetime import datetime
+
 from django.db.models import Q
 from django.http import HttpResponse
 
@@ -57,6 +59,10 @@ def get_letter(request):
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)
     if request.method == 'GET':
+        now = datetime.now()
+        # if now.month is not 12 or now.day is not 25:
+        #     print(str(now.month) + '/' + str(now.day))
+        #     return HttpResponse(status=400)
         payload = jwt.decode(request.headers['Authorization'][7:], SECRET_KEY, ALGORITHM)
         user = get_object_or_404(User, email=payload['email'])
         letters = Letter.objects.filter(Q(is_answer=1) & Q(writer=user))
