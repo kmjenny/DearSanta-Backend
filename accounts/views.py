@@ -14,9 +14,11 @@ def register(request):
         try:
             if User.objects.filter(email=data['email']).exists():
                 return JsonResponse({"message": "EXISTS_EMAIL"}, status=400)
+            if data['password1'] != data['password2']:
+                return HttpResponse(status=400)
             User.objects.create(
                 email=data['email'],
-                password=data['password'],
+                password=data['password1'],
                 name=data['name']
             )
             return HttpResponse(status=200)
@@ -45,6 +47,20 @@ def login(request):
 
 
 @csrf_exempt
+def find_password(request):
+    if request.method == 'GET':
+        email = request.GET['email']
+        user = get_object_or_404(User, email=email)
+        data = {
+            'username': user.name,
+            'password': user.password
+        }
+        return HttpResponse(json.dumps(data), status=200)
+    else:
+        return HttpResponse(status=400)
+
+
+@csrf_exempt
 def logout(request):
     if request.method == 'POST':
         data = json.loads(request.body)
@@ -61,7 +77,7 @@ def logout(request):
 
 @csrf_exempt
 def user_info(request):
-    print(request.headers['Authorization'][8:])
+    print(request.headers['Authorization'][7:])
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)
     if request.method == 'GET':
