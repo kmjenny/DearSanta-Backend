@@ -1,3 +1,5 @@
+from pprint import pprint
+
 from django.shortcuts import get_object_or_404
 import json, jwt
 from .models import User
@@ -8,6 +10,7 @@ from DearSanta.settings import SECRET_KEY, ALGORITHM
 
 @csrf_exempt
 def register(request):
+    pprint(request)
     if request.method == 'POST':
         data = json.loads(request.body)
 
@@ -29,6 +32,7 @@ def register(request):
 
 @csrf_exempt
 def login(request):
+    pprint(request)
     if request.method == 'POST':
         data = json.loads(request.body)
         user = get_object_or_404(User, email=data["email"])
@@ -48,6 +52,7 @@ def login(request):
 
 @csrf_exempt
 def find_password(request):
+    pprint(request)
     if request.method == 'GET':
         email = request.GET['email']
         user = get_object_or_404(User, email=email)
@@ -62,6 +67,7 @@ def find_password(request):
 
 @csrf_exempt
 def logout(request):
+    pprint(request)
     if request.method == 'POST':
         data = json.loads(request.body)
         user = get_object_or_404(User, email=data["email"])
@@ -77,6 +83,7 @@ def logout(request):
 
 @csrf_exempt
 def user_info(request):
+    pprint(request)
     print(request.headers['Authorization'][7:])
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)

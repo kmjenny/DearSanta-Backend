@@ -1,5 +1,6 @@
 import json, jwt
 from datetime import datetime
+from pprint import pprint
 
 from django.db.models import Q
 from django.http import HttpResponse
@@ -15,6 +16,7 @@ from letter.models import Letter, Answer
 
 @csrf_exempt
 def write_letter(request):
+    pprint(request)
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)
     if request.method == 'POST':
@@ -33,6 +35,7 @@ def write_letter(request):
 
 @csrf_exempt
 def write_answer(request):
+    pprint(request)
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)
     if request.method == 'POST':
@@ -56,6 +59,7 @@ def write_answer(request):
 
 @csrf_exempt
 def get_letter(request):
+    pprint(request)
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)
     if request.method == 'GET':
