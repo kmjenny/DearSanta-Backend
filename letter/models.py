@@ -7,6 +7,9 @@ class Letter(models.Model):
     writer = models.ForeignKey("accounts.User",
                                on_delete=models.CASCADE,
                                db_column='writer')
+    ans = models.ForeignKey("letter.Answer",
+                               on_delete=models.CASCADE,
+                               db_column='answer',null=True)
     content = models.CharField(max_length=255, null=True)
     is_answer = models.SmallIntegerField(default=0)
 
@@ -19,9 +22,9 @@ class Letter(models.Model):
 
 class Answer(models.Model):
     content = models.CharField(max_length=255, null=True)
-    letter = models.ForeignKey("letter.Letter",
+    lt = models.ForeignKey("letter.Letter",
                                on_delete=models.CASCADE,
-                               db_column='letter')
+                               db_column='lt',null=True)
     responser = models.ForeignKey("accounts.User",
                                   on_delete=models.CASCADE,
                                   db_column='responser')

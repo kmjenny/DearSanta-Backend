@@ -46,16 +46,36 @@ def write_answer(request):
         payload = jwt.decode(request.headers['Authorization'][7:], SECRET_KEY, ALGORITHM)
         user = get_object_or_404(User, email=payload['email'])
 
+
+        answer = Answer.object.filter(responser=user).last()
+        answer.content = data['content']
+        answer.save()
+        return HttpResponse(status=200)
+    else:
+        return HttpResponse(status=400)
+
+
+@csrf_exempt
+def some_letter(request):
+    pprint(request.headers)
+    if 'Authorization' not in request.headers:
+        return HttpResponse(status=401)
+    if request.method == 'GET':
+        payload = jwt.decode(request.headers['Authorization'][7:], SECRET_KEY, ALGORITHM)
+        user = get_object_or_404(User, email=payload['email'])
         letter = Letter.objects.filter(Q(is_answer=0) & ~Q(writer=user)).first()
         letter.is_answer = 1
+
+        answer = Answer.objects.create(lt=letter, responser=user)
+
+        letter.ans = answer
         letter.save()
 
-        Answer.objects.create(
-            content=data['content'],
-            letter=letter,
-            responser=user
-        )
-        return HttpResponse(status=200)
+        data = {
+            'content': letter.content,
+            'writer': letter.user.name
+        }
+        return HttpResponse(json.dumps(data), status=200)
     else:
         return HttpResponse(status=400)
 
@@ -82,7 +102,7 @@ def get_letter(request):
                 },
                 'answer': {
                     'dear': user.name,
-                    'content': get_object_or_404(Answer, letter=letter).content,
+                    'content': get_object_or_404(Answer, lt=letter).content,
                     'from': 'Santa'
                     # 'from': get_object_or_404(User, name=get_object_or_404(Answer, letter=letter).responser).name
                 }
