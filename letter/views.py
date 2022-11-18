@@ -47,7 +47,7 @@ def write_answer(request):
         user = get_object_or_404(User, email=payload['email'])
 
 
-        answer = Answer.object.filter(responser=user).last()
+        answer = Answer.objects.filter(responser=user.pk).last()
         answer.content = data['content']
         answer.save()
         return HttpResponse(status=200)
@@ -73,7 +73,7 @@ def some_letter(request):
 
         data = {
             'content': letter.content,
-            'writer': letter.user.name
+            'writer': letter.writer.name
         }
         return HttpResponse(json.dumps(data), status=200)
     else:
