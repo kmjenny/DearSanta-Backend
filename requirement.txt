@@ -1,6 +1,7 @@
 asgiref==3.5.2
 Django==3.2.16
-mysqlclient
+django-cors-headers==3.13.0
+mysqlclient @ file:///C:/Users/ojyse/PycharmProjects/Maplethon/mysqlclient-1.4.6-cp37-cp37m-win_amd64.whl
 PyJWT==2.6.0
 pytz==2022.6
 sqlparse==0.4.3
