@@ -10,9 +10,10 @@ from DearSanta.settings import SECRET_KEY, ALGORITHM
 
 @csrf_exempt
 def register(request):
-    pprint(request)
+    pprint('method : '+request.method)
     if request.method == 'POST':
         data = json.loads(request.body)
+        pprint(data)
 
         try:
             if User.objects.filter(email=data['email']).exists():
@@ -32,9 +33,10 @@ def register(request):
 
 @csrf_exempt
 def login(request):
-    pprint(request)
+    pprint('method : '+request.method)
     if request.method == 'POST':
         data = json.loads(request.body)
+        pprint(data)
         user = get_object_or_404(User, email=data["email"])
         jwt_source = {'email': user.email}
         try:
@@ -52,8 +54,9 @@ def login(request):
 
 @csrf_exempt
 def find_password(request):
-    pprint(request)
+    pprint('method : '+request.method)
     if request.method == 'GET':
+        pprint(request.GET)
         email = request.GET['email']
         user = get_object_or_404(User, email=email)
         data = {

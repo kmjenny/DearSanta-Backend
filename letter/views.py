@@ -16,16 +16,18 @@ from letter.models import Letter, Answer
 
 @csrf_exempt
 def write_letter(request):
-    pprint(request)
+    pprint(request.headers)
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)
     if request.method == 'POST':
+        data = json.loads(request.body)
+        pprint(data)
         payload = jwt.decode(request.headers['Authorization'][7:], SECRET_KEY, ALGORITHM)
         user = get_object_or_404(User, email=payload['email'])
         Letter.objects.create(
             dear='Santa',
             writer=user,
-            content=json.loads(request.body)['content'],
+            content=data['content'],
             is_answer=0
         )
         return HttpResponse(status=200)
@@ -35,11 +37,12 @@ def write_letter(request):
 
 @csrf_exempt
 def write_answer(request):
-    pprint(request)
+    pprint(request.headers)
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)
     if request.method == 'POST':
         data = json.loads(request.body)
+        pprint(data)
         payload = jwt.decode(request.headers['Authorization'][7:], SECRET_KEY, ALGORITHM)
         user = get_object_or_404(User, email=payload['email'])
 
@@ -59,7 +62,7 @@ def write_answer(request):
 
 @csrf_exempt
 def get_letter(request):
-    pprint(request)
+    pprint(request.headers)
     if 'Authorization' not in request.headers:
         return HttpResponse(status=401)
     if request.method == 'GET':
